@@ -85,7 +85,7 @@
     }
 
     onClear = () => {
-        if(!isShowingReplay){
+        if(!isShowingReplay && !isCleaning){
             isCleaning = true
             let index = pixelsArray.length - 1
             const interval = setInterval(() => {
@@ -113,7 +113,7 @@
     }
 
     onReplay = () => {
-        if(!isCleaning){
+        if(!isCleaning && !isShowingReplay){
             isShowingReplay = true
             let index = 0
             removeElementsByClass("pixel")
