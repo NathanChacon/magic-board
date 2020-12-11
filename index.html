@@ -119,6 +119,8 @@
                 if(index < pixelsArray.length){
                     let pixel = pixelsArray[index]
                     pixel.classList.add("is-pixel-activated")
+                    pixel.style.boxShadow = `0 0 5px 5px #fff,0 0 5px 5px ${pixel.style.backgroundColor},0 0 5px 5px #0ff`
+                    clearShadow(pixel)
                     board.appendChild(pixel)
                     index++
                 }
@@ -128,6 +130,12 @@
                 }
             }, 10)
         }
+    }
+
+    clearShadow = (pixel) => {
+        setTimeout(() => {
+            pixel.style.boxShadow = "none"
+        }, 5)
     }
 </script>
 </html>
