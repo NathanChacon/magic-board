@@ -65,8 +65,10 @@
 
     onMouseDown = (event) => {
         mouseDown = true
-        const mousePosition = getCurrentMousePosition(event)
-        insertPixels(mousePosition.x, mousePosition.y, board)
+        if(!isCleaning && !isShowingReplay){
+            const mousePosition = getCurrentMousePosition(event)
+            insertPixels(mousePosition.x, mousePosition.y, board)
+        }
     }
 
     onMouseUp = (event) => {
