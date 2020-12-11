@@ -56,7 +56,9 @@
             let offset = {x: board.offsetLeft, y: board.offsetTop}
             let mouseXPosition = event.clientX - offset.x
             let mouseYPosition = event.clientY - offset.y
-            insertPixels(mouseXPosition, mouseYPosition, board)
+            if(!isCleaning && !isShowingReplay){
+                insertPixels(mouseXPosition, mouseYPosition, board)
+            }
         }
     }
 
