@@ -44,6 +44,8 @@
 
     onMouseDown = (event) => {
         mouseDown = true
+        const mousePosition = getCurrentMousePosition(event)
+        insertPixels(mousePosition.x, mousePosition.y, board)
     }
 
     onMouseUp = (event) => {
@@ -52,11 +54,9 @@
 
     onMouseMove = (event) => {
         if(mouseDown){
-            let offset = {x: board.offsetLeft, y: board.offsetTop}
-            let mouseXPosition = event.clientX - offset.x
-            let mouseYPosition = event.clientY - offset.y
+            const mousePosition = getCurrentMousePosition(event)
             if(!isCleaning && !isShowingReplay){
-                insertPixels(mouseXPosition, mouseYPosition, board)
+                insertPixels(mousePosition.x, mousePosition.y, board)
             }
         }
     }
@@ -66,8 +66,8 @@
         pixel.className = "pixel"
         pixel.style.backgroundColor = selectedColor
         pixel.setAttribute('draggable', false)
-        pixel.style.top = y - 5 + "px";
-        pixel.style.left = x - 5 + "px";
+        pixel.style.top = y  + "px";
+        pixel.style.left = x  + "px";
         target.appendChild(pixel)
     }
 
@@ -133,6 +133,14 @@
                 }
             }, 10)
         }
+    }
+
+    getCurrentMousePosition = (event) => {
+        let offset = {x: board.offsetLeft, y: board.offsetTop}
+        let mouseXPosition = (event.clientX - offset.x) - 5
+        let mouseYPosition = (event.clientY - offset.y) - 5
+
+        return {x: mouseXPosition, y: mouseYPosition}
     }
 
     clearShadow = (pixel) => {
