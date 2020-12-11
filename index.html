@@ -25,7 +25,6 @@
     const board = document.getElementById("board")
     const colorContainer = document.getElementById("color-container")
     const colors = ["#000000","#FFFF", "#FF0000", "#ffff00", "#99ff00", "#00F0FF", "#b300b3", "#54007d"]
-    let pixelsArray = []
     let selectedColor = "#FFFF"
     let mouseDown = false
     let isShowingReplay = false
@@ -70,7 +69,6 @@
         pixel.style.top = y - 5 + "px";
         pixel.style.left = x - 5 + "px";
         target.appendChild(pixel)
-        pixelsArray.push(pixel)
     }
 
     onClickColor = (event) => {
@@ -86,6 +84,7 @@
 
     onClear = () => {
         if(!isShowingReplay && !isCleaning){
+            let pixelsArray = document.getElementsByClassName("pixel")
             isCleaning = true
             let index = pixelsArray.length - 1
             const interval = setInterval(() => {
@@ -114,6 +113,7 @@
 
     onReplay = () => {
         if(!isCleaning && !isShowingReplay){
+            let pixelsArray = [...document.getElementsByClassName("pixel")]
             isShowingReplay = true
             let index = 0
             removeElementsByClass("pixel")
@@ -128,6 +128,7 @@
                 }
                 else{
                     clearInterval(interval)
+                    pixelsArray = []
                     isShowingReplay = false
                 }
             }, 10)
