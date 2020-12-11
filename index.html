@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./main.css">
+    <title>Cartoon</title>
+</head>
+<body>
+    <main id="main" class="main-container">
+        <div class="buttons-container">
+            <button onclick="onReplay()" class="btn replay-button">Replay</button>
+            <button onclick="onClear()" class="btn clear-button">Clear</button>
+        </div>
+        <div class="cartoon-container">
+            <div id="color-container" class="colors">    
+            </div>
+            <div id="board" class="board" onmousedown="onMouseDown(event)" onmouseup="onMouseUp(event)" onmousemove="onMouseMove(event)">
+            </div>
+        </div>
+    </main>
+</body>
+
+<script>
+    const board = document.getElementById("board")
+    const colorContainer = document.getElementById("color-container")
+    const colors = ["#000000", "#FF0000", "#ffff00", "#99ff00", "#00F0FF", "#b300b3", "#54007d", "#0000b3"]
+    let pixelsArray = []
+    let selectedColor = "#000000"
+    let mouseDown = false
+    let isShowingReplay = false
+    let isCleaning = false
+
+    window.onload = (event) => {
+        colors.forEach((color) => {
+            const colorDiv = document.createElement("div")
+            colorDiv.className = "color"
+            colorDiv.id = color
+            colorDiv.style.backgroundColor = color
+            colorDiv.setAttribute("hexadecimal", color)
+            colorDiv.onclick = onClickColor
+            colorContainer.appendChild(colorDiv)
+        })
+    }
+
+    onMouseDown = (event) => {
+        mouseDown = true
+    }
+
+    onMouseUp = (event) => {
+        mouseDown = false
+    }
+
+    onMouseMove = (event) => {
+        if(mouseDown){
+            let offset = {x: board.offsetLeft, y: board.offsetTop}
+            let mouseXPosition = event.clientX - offset.x
+            let mouseYPosition = event.clientY - offset.y
+            insertPixels(mouseXPosition, mouseYPosition, board)
+        }
+    }
+
+    insertPixels = (x, y, target) => {
+        const pixel = document.createElement("div")
+        pixel.className = "pixel"
+        pixel.style.backgroundColor = selectedColor
+        pixel.setAttribute('draggable', false)
+        pixel.style.top = y - 5 + "px";
+        pixel.style.left = x - 5 + "px";
+        target.appendChild(pixel)
+        pixelsArray.push(pixel)
+    }
+
+    onClickColor = (event) => {
+        const previousColor = selectedColor
+        clearSelectedColor(previousColor)
+        event.target.classList.add("is-color-selected")
+        selectedColor = event.target.getAttribute("hexadecimal")
+    }
+
+    clearSelectedColor = (hexadecimal) => {
+        document.getElementById(hexadecimal).classList.remove("is-color-selected")
+    }
+
+    onClear = () => {
+        if(!isShowingReplay){
+            isCleaning = true
+            let index = pixelsArray.length - 1
+            const interval = setInterval(() => {
+                if(index >= 0){
+                    let pixel = pixelsArray[index]
+                    pixel.classList.add("is-pixel-disabled")
+                    board.appendChild(pixel)
+                    index--
+                }
+                else{
+                    clearInterval(interval)
+                    removeElementsByClass("pixel")
+                    pixelsArray = []
+                    isCleaning = false
+                }
+            }, 10)
+        }
+    }
+
+    removeElementsByClass = (className) => {
+        var elements = document.getElementsByClassName(className);
+        while(elements.length > 0){
+            elements[0].parentNode.removeChild(elements[0]);
+        }
+    }
+
+    onReplay = () => {
+        if(!isCleaning){
+            isShowingReplay = true
+            let index = 0
+            removeElementsByClass("pixel")
+            const interval = setInterval(() => {
+                if(index < pixelsArray.length){
+                    let pixel = pixelsArray[index]
+                    pixel.classList.add("is-pixel-activated")
+                    board.appendChild(pixel)
+                    index++
+                }
+                else{
+                    clearInterval(interval)
+                    isShowingReplay = false
+                }
+            }, 10)
+        }
+    }
+</script>
+</html>
