@@ -55,12 +55,14 @@
     }
 
     colorPicker.onChange = function(color) {
+        clearSelectedColor(selectedColor)
         colorPickerParent.style.backgroundColor = color.hex
         selectedColor = color.hex
     };
 
     onClickPicker = function(){
-        clearSelectedColor(selectedColor)
+        const previousColor = selectedColor
+        clearSelectedColor(previousColor)
     }
 
     onMouseDown = (event) => {
