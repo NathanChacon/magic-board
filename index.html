@@ -8,12 +8,15 @@
 </head>
 <body>
     <main id="main" class="main-container">
+        <div class="btn color-picker" id="color-picker">
+            <img src="https://img.icons8.com/nolan/64/color-dropper.png"/>
+        </div>  
         <div class="buttons-container">
             <button onclick="onReplay()" class="btn replay-button">Replay</button>
             <button onclick="onClear()" class="btn clear-button">Clear</button>
         </div>
         <div class="cartoon-container">
-            <div id="color-container" class="colors">    
+            <div id="color-container" class="colors">  
             </div>
             <div id="board" class="board" onmousedown="onMouseDown(event)" onmouseup="onMouseUp(event)" onmousemove="onMouseMove(event)">
             </div>
@@ -21,10 +24,17 @@
     </main>
 </body>
 
+<script src="https://unpkg.com/vanilla-picker@2"></script>
 <script>
     const board = document.getElementById("board")
     const colorContainer = document.getElementById("color-container")
     const colors = ["#000000","#FFFF", "#FF0000", "#ffff00", "#99ff00", "#00F0FF", "#b300b3", "#54007d"]
+    let colorPickerParent = document.getElementById("color-picker")
+    let colorPicker = new Picker({
+        parent: colorPickerParent,
+        popup: "right",
+        editorFormat: 'hex'
+    });
     let selectedColor = "#FFFF"
     let mouseDown = false
     let isShowingReplay = false
@@ -41,6 +51,11 @@
             colorContainer.appendChild(colorDiv)
         })
     }
+
+    colorPicker.onChange = function(color) {
+        colorPickerParent.style.backgroundColor = color.hex
+        selectedColor = color.hex
+    };
 
     onMouseDown = (event) => {
         mouseDown = true
